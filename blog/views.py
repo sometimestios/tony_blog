@@ -6,3 +6,8 @@ def index(request):
     return render(request,'index.html',context={
         'post_list':post_list,
     })
+
+def detail(request,pk):
+    return render(request,'blog/detail.html',context={
+        'pk':pk
+    })
