@@ -14,7 +14,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = '分类'
         verbose_name_plural = verbose_name
-
+    # Python的魔术方法，在查询时显示name属性，不需要调用.name属性
     def __str__(self):
         return self.name
 
@@ -32,7 +32,7 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField('标题', max_length=40)  # 等价于关键词参数verbose_name='标题'
-    createdTime = models.DateTimeField('创建时间', default=timezone.now())  # 默认值为当前时间，timezone.now可以自适应时区
+    createdTime = models.DateTimeField('创建时间', default=timezone.now)  # 默认值为当前时间，timezone.now可以自适应时区
     modifiedTime = models.DateTimeField('修改时间')
     body = models.TextField('正文')
     excerpt = models.TextField('摘要', max_length=400, blank=True)  # 允许为空
