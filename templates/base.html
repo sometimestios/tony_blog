@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load blog_extra %}
 <html>
 <head>
     <title>Black &amp; White</title>
@@ -53,7 +54,7 @@
         }
     </style>
 </head>
-</head>
+
 
 <body>
 <div class="container">
@@ -85,7 +86,9 @@
                     <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>
                     <div id="search-form" class="search-form">
                         <form role="search" method="get" id="searchform" action="#">
-                            <input type="search" placeholder="搜索" required>
+                            <label>
+                                <input type="search" placeholder="搜索" required>
+                            </label>
                             <button type="submit"><span class="ion-ios-search-strong"></span></button>
                         </form>
                     </div>
@@ -107,8 +110,17 @@
             </main>
 
             <aside class="col-md-4">
-                {% block aside %}
+                {% block toc %}
                 {% endblock %}
+                {% show_recent_posts %}
+                {% show_archive %}
+                {% show_category %}
+                {% show_recent_posts %}
+
+                <div class="rss">
+                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                </div>
+
             </aside>
         </div>
     </div>
