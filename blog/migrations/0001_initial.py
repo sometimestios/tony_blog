@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=40)),
                 ('createdTime', models.DateTimeField()),
-                ('modifiedTime', models.DateTimeField()),
+                ('modified_time', models.DateTimeField()),
                 ('body', models.TextField()),
                 ('excerpt', models.TextField(blank=True, max_length=400)),
                 ('author', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),

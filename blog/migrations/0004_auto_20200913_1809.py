@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='post',
-            name='createdTime',
+            name='created_time',
             field=models.DateTimeField(default=datetime.datetime(2020, 9, 13, 10, 9, 41, 294684, tzinfo=utc), verbose_name='创建时间'),
         ),
         migrations.AlterField(
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='post',
-            name='modifiedTime',
+            name='modified_time',
             field=models.DateTimeField(verbose_name='修改时间'),
         ),
         migrations.AlterField(

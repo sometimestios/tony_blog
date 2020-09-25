@@ -8,7 +8,7 @@ import re
 
 # Create your views here.
 def index(request):
-    post_list = Post.objects.all().order_by('-createdTime')
+    post_list = Post.objects.all()
     return render(request, 'blog/index.html', context={
         'post_list': post_list,
     })
@@ -29,8 +29,8 @@ def detail(request, pk):
 
 
 def archive(request, year, month):
-    post_list = Post.objects.filter(createdTime__year=year,
-                                    createdTime__month=month).order_by('-createdTime')
+    post_list = Post.objects.filter(created_time__year=year,
+                                    created_time__month=month)
     return render(request, 'blog/index.html', context={
         'post_list': post_list
     })
@@ -38,7 +38,7 @@ def archive(request, year, month):
 
 def category(request, category_name):
     category_class = Category.objects.get(name=category_name)
-    post_list = Post.objects.filter(category=category_class).order_by('-createdTime')
+    post_list = Post.objects.filter(category=category_class)
     return render(request, 'blog/index.html', context={
         'post_list': post_list
     })
@@ -46,7 +46,7 @@ def category(request, category_name):
 
 def tag(request, tag_name):
     tag_class = Tag.objects.get(name=tag_name)
-    post_list = Post.objects.filter(tag=tag_class).order_by('-createdTime')
+    post_list = Post.objects.filter(tag=tag_class)
     return render(request, 'blog/index.html', context={
         'post_list': post_list
     })

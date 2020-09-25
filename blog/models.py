@@ -33,8 +33,8 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField('标题', max_length=40)  # 等价于关键词参数verbose_name='标题'
-    createdTime = models.DateTimeField('创建时间', default=timezone.now)  # 默认值为当前时间，timezone.now可以自适应时区
-    modifiedTime = models.DateTimeField('修改时间')
+    created_time = models.DateTimeField('创建时间', default=timezone.now)  # 默认值为当前时间，timezone.now可以自适应时区
+    modified_time = models.DateTimeField('修改时间')
     body = models.TextField('正文')
     excerpt = models.TextField('摘要', max_length=400, blank=True)  # 允许为空
     category = models.ForeignKey(Category, verbose_name='分类', on_delete=models.CASCADE)  # 多对一关联；级联删除的策略
@@ -44,12 +44,13 @@ class Post(models.Model):
     class Meta:
         verbose_name = '文章'
         verbose_name_plural = '文章'
+        ordering=['-created_time','title']
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.modifiedTime = timezone.now()
+        self.modified_time = timezone.now()
         md = markdown.Markdown(extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.codehilite',

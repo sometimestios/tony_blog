@@ -7,14 +7,14 @@ register = template.Library()
 @register.inclusion_tag('blog/inclusions/_recent_posts.html')
 def show_recent_posts(num=5):
     return {
-        'recent_post_list': Post.objects.all().order_by('-createdTime')[:num],
+        'recent_post_list': Post.objects.all()[:num],
     }
 
 
 @register.inclusion_tag('blog/inclusions/_archive.html')
 def show_archive():
     return {
-        'date_list': Post.objects.dates('createdTime', 'month', order='DESC'),
+        'date_list': Post.objects.dates('created_time', 'month', order='DESC'),
     }
 
 
