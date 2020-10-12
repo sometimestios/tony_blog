@@ -1,15 +1,17 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 from markdown.extensions.toc import TocExtension
 from .models import Post, Category, Tag
-from django.core.paginator import Paginator, PageNotAnInteger, InvalidPage, EmptyPage
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from pure_pagination.mixins import PaginationMixin
+from django.contrib import messages
+from django.db.models import Q
 import markdown
 import re
 
 
 # Create your views here.
-class IndexView(ListView):
+class IndexView(PaginationMixin, ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
@@ -17,27 +19,15 @@ class IndexView(ListView):
     paginate_by = 10
 
 
-def detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    md = markdown.Markdown(extensions=[
-        'markdown.extensions.extra',
-        'markdown.extensions.codehilite',
-        # 记得在顶部引入 TocExtension 和 slugify
-        TocExtension(slugify=slugify),
-    ])
-    post.body = md.convert(post.body)
-    m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
-    post.toc = m.group(1) if m is not None else ''
-    post.increase_views()
-    return render(request, 'blog/detail.html', context={'post': post})
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'post'
 
-
-def archive(request, year, month):
-    post_list = Post.objects.filter(created_time__year=year,
-                                    created_time__month=month)
-    return render(request, 'blog/index.html', context={
-        'post_list': post_list
-    })
+    def get(self, request, *args, **kwargs):
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
+        self.object.increase_views()
+        return response
 
 
 class ArchiveView(IndexView):
@@ -60,21 +50,12 @@ class TagView(IndexView):
         return super(TagView, self).get_queryset().filter(tag=tag)
 
 
-def tag(request, tag_name):
-    tag_class = Tag.objects.get(name=tag_name)
-    post_list = Post.objects.filter(tag=tag_class)
-    return render(request, 'blog/index.html', context={
-        'post_list': post_list
-    })
+def search(request):
+    q = request.GET.get('q')
+    if not q:
+        error_msg = "请输入搜索词"
+        messages.add_message(request, messages.ERROR, error_msg, extra_tags='danger')
+        return redirect('blog:index')
 
-# def page_guide(request):
-#     all_post = Post.objects.all()
-#     paginator = Paginator(all_post, 10)
-#     page_num = request.GET.get('page')
-#     try:
-#         post_list = paginator.page(page_num)
-#     except(PageNotAnInteger, EmptyPage, InvalidPage):
-#         post_list = paginator.page('1')
-#     return render(request, 'blog/index.html', context={
-#         'post_list': post_list,
-#     })
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+    return render(request, 'blog/index.html', {'post_list': post_list})
