@@ -24,7 +24,7 @@ SECRET_KEY = '1!94fsmr)n)+m)!zikug-ju$roxckehf83wrz^l(6!d(y#mva-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost','.tonysongwb.top']
 
 # Application definition
 
@@ -115,7 +115,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT=os.path.join(BASE_DIR,'static')
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 4,
     'MARGIN_PAGES_DISPLAYED': 2,

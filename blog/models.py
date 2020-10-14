@@ -57,7 +57,7 @@ class Post(models.Model):
     created_time = models.DateTimeField('创建时间', default=timezone.now)  # 默认值为当前时间，timezone.now可以自适应时区
     modified_time = models.DateTimeField('修改时间')
     body = models.TextField('正文')
-    excerpt = models.TextField('摘要', max_length=400, blank=True)  # 允许为空
+    excerpt = models.TextField('摘要', max_length=300, blank=True)  # 允许为空
     category = models.ForeignKey(Category, verbose_name='分类', on_delete=models.CASCADE)  # 多对一关联；级联删除的策略
     tag = models.ManyToManyField(Tag, verbose_name='标签')  # 多对多
     author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE, blank=True)
@@ -77,7 +77,7 @@ class Post(models.Model):
             'markdown.extensions.extra',
             'markdown.extensions.codehilite',
         ])
-        self.excerpt = strip_tags(md.convert(self.body))[:300]
+        self.excerpt = strip_tags(md.convert(self.body))[:250]
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
